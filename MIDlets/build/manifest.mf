@@ -1,0 +1,15 @@
+MIDlet-6: RMSOps, , agendaRegistros.RMSOps
+MIDlet-7: MidletPar, , fibonacci.MidletPar
+MIDlet-8: MidletPalindromo, , fibonacci.MidletPalindromo
+MIDlet-9: MidletMaravilloso, , fibonacci.MidletMaravilloso
+MIDlet-2: MidletFibonacci, , fibonacci.MidletFibonacci
+MIDlet-3: MIDlet_Agenda, , fibonacci.MIDlet_Agenda
+MIDlet-4: Principal, , agendaRegistros.Principal
+MIDlet-5: Forma, , agendaRegistros.Forma
+MIDlet-1: HelloMIDlet, , fibonacci.HelloMIDlet
+MIDlet-10: ReadWriteRMS, , agendaRegistros.ReadWriteRMS
+MIDlet-Vendor: Vendor
+MIDlet-Version: 1.0
+MIDlet-Name: fibonacci
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.1
