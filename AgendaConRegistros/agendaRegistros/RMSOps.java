@@ -17,9 +17,13 @@ import javax.microedition.rms.*;
  */
 public class RMSOps{
     RecordStore rs;
-    public RMSOps(){
+    String nombreZona;
+    
+    public RMSOps(String nombreZona){
+        this.nombreZona = nombreZona;    
     }
-    public boolean abrir(String nombreZona){
+    
+    public boolean abrir(){
         try{
             rs = RecordStore.openRecordStore(nombreZona, true);
             return true;
@@ -69,15 +73,16 @@ public class RMSOps{
         byte[] reg = new byte[1000];
         int tam;
         String [] buffer = new String[rs.getNumRecords()];
-        try{
+        
             for(int i = 1; i<= rs.getNumRecords(); i++){
-                tam = rs.getRecordSize(i);
-                reg = rs.getRecord(i);
-                buffer[i-1] = i + new String(reg,0,tam);
-            } 
-        }catch(RecordStoreException e){
-            System.out.println("Error de Lectura");
-        }
+                try{
+                    tam = rs.getRecordSize(i);
+                    reg = rs.getRecord(i);
+                    buffer[i-1] = i + new String(reg,0,tam); 
+                }catch(RecordStoreException e){
+                    System.out.println("Error de Lectura");
+                }    
+            }            
         return buffer;
     }
     public String[] listarRegistro(int r){
@@ -99,6 +104,29 @@ public class RMSOps{
         }
         return datos;
     }
+    
+    public void borrarRegistro(int index) {
+        if (rs.listRecordStores() != null) {
+            try {
+                abrir();
+                String [] aux = listarRegistroArr();
+                cerrar();
+                
+                RecordStore.deleteRecordStore(nombreZona);              
+                rs = RecordStore.openRecordStore(nombreZona, true);
+                
+                for(int i = 1; i <= aux.length; i++){
+                    if(i != index){
+                        adicionarRegistro(aux[i-1]);
+                    }else;
+                }
+                cerrar();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     public boolean cerrar(){
         try{
             rs.closeRecordStore();
