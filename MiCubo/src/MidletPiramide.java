@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+import javax.microedition.midlet.*;
+
+
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Canvas;
@@ -15,18 +18,18 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.midlet.*;
 
-public class CuboMidlet extends MIDlet implements CommandListener{
+public class MidletPiramide extends MIDlet implements CommandListener{
 
     private Display d;
     Canvas ca;
     private Command cs;
 
-    public CuboMidlet(){
+    public MidletPiramide(){
         d = Display.getDisplay(this); 
 
         ca = new Canvas(){
             int centerX, centerY, maxX, maxY, minMaxXY;
-            Obj obj = new Obj();
+            ObjPiramide obj = new ObjPiramide();
             int x=0, y=0;
             public void paint(Graphics g){             
                 g.setColor(0x5B98FF);
@@ -98,23 +101,23 @@ public class CuboMidlet extends MIDlet implements CommandListener{
     } 
 }
 
-class Obj{	// Posee los datos del objeto 3D
+class ObjPiramide{	// Posee los datos del objeto 3D
     float rho, theta=0.3F, phi=1.3F, d, objSize, v11, v12, v13, v21, v22, v23, v32, v33, v43; // elementos de la matriz V
     Point3D [] w;	// coordenadas universales
     Point2D [] vScr; // coordenadas de la pantalla
-    Obj(){	// CAMBIAR LAS COORDENADAS X,Y,Z CON 0,1 PARA CONSTRUIR PRISMA, CILINDRO, PIRAMIDE, CONO Y ESFERA.
+    ObjPiramide(){	// CAMBIAR LAS COORDENADAS X,Y,Z CON 0,1 PARA CONSTRUIR PRISMA, CILINDRO, PIRAMIDE, CONO Y ESFERA.
         w	= new Point3D[8];
 	vScr	= new Point2D[8];
         
-        //Cubo
+        //Base
         w[0]	= new Point3D(1, -1, -1); // desde la base
 	w[1]	= new Point3D(1, 1, -1);
 	w[2]	= new Point3D(-1, 1, -1);
 	w[3]	= new Point3D(-1, -1, -1);
-	w[4]	= new Point3D(1, -1, 1);
-	w[5]	= new Point3D(1, 1, 1);
-	w[6]	= new Point3D(-1, 1, 1);
-	w[7]	= new Point3D(-1, -1, 1);
+	w[4]	= new Point3D(0, 0, 1);
+	w[5]	= new Point3D(0, 0, 1);
+	w[6]	= new Point3D(0, 0, 1);
+	w[7]	= new Point3D(0, 0, 1);
         
 	objSize = (float) Math.sqrt(12F); // = sqrt(2*2 + 2*2 + 2*2) es la distancia entre dos vertices opuestos
 	rho	= 5*objSize;		// para cambiar la perspectiva
@@ -135,19 +138,4 @@ class Obj{	// Posee los datos del objeto 3D
     }
 }
 
-class Point2D{
-    float x, y;
-    Point2D(float x, float y){
-    	this.x = x;
-        this.y = y;
-    }
-}
 
-class Point3D{
-    float x, y, z;
-    Point3D(double x, double y, double z){
-        this.x = (float) x;
-	this.y = (float) y;
-	this.z = (float) z;
-    }
-}
