@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/xtv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IPN"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+</android.support.constraint.ConstraintLayout>-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvtituloSuma"
+            android:text="Resultado de suma"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvsuma"
+            android:text="@string/suma"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvtituloParidad"
+            android:text="Ingresa un numero para conocer su paridad"
+            android:textSize="20dp"
+            />
+
+        <EditText
+            android:id="@+id/xedParidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/xtvparidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/paridad"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/xbParidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="0dp"
+            android:text="Confirmar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvtituloMar"
+            android:text="Ingresa un numero para conocer si es maravilloso"
+            android:textSize="20dp"
+            />
+
+        <EditText
+            android:id="@+id/xedMar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/xtvMar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/maravilloso"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/xbMar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Confirmar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvtituloPal"
+            android:text="Ingresa una palabra para conocer si es palindrome"
+            android:textSize="20dp"
+            />
+
+        <EditText
+            android:id="@+id/xedPal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/xtvPal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/palindrome"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/xbPal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Confirmar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/xtvtituloFibo"
+            android:text="Ingresa una numero de tope para la serie fibonacci"
+            android:textSize="20dp"
+            />
+
+        <EditText
+            android:id="@+id/xedFibo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/xtvFibo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fibonacci"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/xbFibo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Confirmar" />
+
+    </LinearLayout>
+</ScrollView>
