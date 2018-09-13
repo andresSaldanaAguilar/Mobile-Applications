@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?> <TableLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="20dp">
+<TableRow>
+
+    <EditText
+        android:id="@+id/A"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X^2 + "
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/B"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X + "
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/C"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+</TableRow>
+<TableRow>
+
+    <Button
+        android:id="@+id/xbn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/colorAccent"
+        android:text="@string/aceptar"
+        android:textColor="@android:color/background_light" />
+</TableRow>
+
+</TableLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Calculadora de Ecuaciones de Segundo Grado</string>
+    <string name="escribir">Escribir</string>
+    <string name="aceptar">Calcular</string>
+</resources>
