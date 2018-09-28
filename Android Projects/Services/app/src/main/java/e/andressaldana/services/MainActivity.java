@@ -17,11 +17,13 @@ import android.view.View;
 import android.widget.*;
 public class MainActivity extends Activity { // ServiceTimerActivity
     private TextView    jtv;
-    private Button      jbn;
+
     MiCrono mService;
     boolean mBound = false;
     LinearLayout linearLayout;
     AnimationDrawable animationDrawable;
+
+    Button startButton, pauseButton, stopButton;
 
     @Override
     public void onCreate(Bundle b) {
@@ -31,28 +33,40 @@ public class MainActivity extends Activity { // ServiceTimerActivity
 
         linearLayout = (LinearLayout)findViewById( R.id.layout);
         animationDrawable = (AnimationDrawable) linearLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.setEnterFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(1000);
 
 
-        jbn = (Button) findViewById(R.id.xbnI);
-        jbn.setOnClickListener(new View.OnClickListener() {
+        startButton = (Button) findViewById(R.id.xbnI);
+        pauseButton = (Button) findViewById(R.id.xbnT);
+        stopButton = (Button) findViewById(R.id.xbnP);
+
+        startButton.setEnabled(true);
+        pauseButton.setEnabled(false);
+        stopButton.setEnabled(false);
+
+        startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 initCrono();
                 mService.iniciarCrono();
                 animationDrawable.start();
+                startButton.setEnabled(false);
+                pauseButton.setEnabled(true);
+                stopButton.setEnabled(true);
             }
         });
 
-        Button pauseButton = (Button) findViewById(R.id.xbnT);
         pauseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 mService.pararCrono();
                 stopCrono();
                 animationDrawable.stop();
+                startButton.setEnabled(true);
+                pauseButton.setEnabled(false);
+                stopButton.setEnabled(true);
+                startButton.setText("REANUDAR");
             } });
-        MiCrono.setUpdateListener(this);
-        Button stopButton = (Button) findViewById(R.id.xbnP);
+
         stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 mService.reiniciarCrono();
@@ -60,6 +74,10 @@ public class MainActivity extends Activity { // ServiceTimerActivity
                 stopCrono();
                 jtv.setText("0.00 s");
                 animationDrawable.stop();
+                startButton.setEnabled(true);
+                pauseButton.setEnabled(false);
+                stopButton.setEnabled(false);
+                startButton.setText("INICIAR");
             } });
         MiCrono.setUpdateListener(this);
     }
