@@ -10,4 +10,5 @@ public class NotificationView extends Activity {
         NotificationManager nm = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         nm.cancel(getIntent().getExtras().getInt("notificationID"));
-    } }
+    }
+}

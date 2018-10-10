@@ -1,0 +1,94 @@
+////////////////////////////////
+// MainActivity.java
+///////////////////////////////
+import java.util.*;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
+import android.hardware.*;
+import android.widget.TextView;
+public class MainActivity extends Activity{
+	TextView jtv;
+	Sensor s;
+	SensorManager sm;
+	List <Sensor> l;
+	String c, v;
+	int n, t;
+	float p, r, d;
+	public void onCreate(Bundle b) {
+		super.onCreate(b);
+		setContentView(R.layout.activity_main);
+		jtv = (TextView) findViewById(R.id.xtv);
+		sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		l = sm.getSensorList(Sensor.TYPE_ALL);
+		n = l.size();
+		jtv.append("\nSensores detectados: " + n + "\n");
+		for(int i=0; i<n; i++){
+			s = l.get(i);
+			t = s.getType();
+			c = s.getName();
+			v = s.getVendor();
+			p = s.getPower();
+			r = s.getResolution();
+			d = s.getMaximumRange();
+			jtv.append("\nTipo de sensor: " + t + ", " + c);
+			jtv.append("\nProveedor: " + v);
+			jtv.append("\nPotencia (ma): " + p);
+			jtv.append("\nMáxima resolución: " + r);
+			jtv.append(", rango: " + d + "\n");
+		}
+	}
+}
+
+//////////////////////////////////////
+// activity_main.xml
+//////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
+	<TextView
+		android:id="@+id/xtv"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/lista" />
+</LinearLayout>
+
+//////////////////////////////////////
+// strings.xml
+//////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">MisSensores</string>
+	<string name="action_settings">Settings</string>
+	<string name="lista">Lista de Sensores:</string>
+</resources>
+
+/////////////////////////////////////
+// menu_main.xml	SOLAMENTE SI ES NECESARIO.
+/////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context=".MainActivity">
+	<item
+		android:id="@+id/action_settings"
+		android:title="@string/action_settings"
+		android:orderInCategory="100"
+		app:showAsAction="never" />
+</menu>
+/////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
