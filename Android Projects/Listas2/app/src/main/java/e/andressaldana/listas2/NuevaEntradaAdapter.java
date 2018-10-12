@@ -15,7 +15,9 @@ public final class NuevaEntradaAdapter extends ArrayAdapter<NuevaEntrada> {
         final ViewHolder vh = getViewHolder(v2);
         final NuevaEntrada ne = getItem(i); vh.tituloView.setText(ne.getTitulo());
         final String s = String.format("Por %s on %s", ne.getAutor(), DateFormat.getDateInstance(DateFormat.SHORT).format(ne.getFecha()));
-        vh.subTituloView.setText(s); vh.imagenView.setImageResource(ne.getIcono()); return v2;
+        vh.subTituloView.setText(s);
+        vh.imagenView.setImageResource(ne.getIcono());
+        return v2;
     }
     private View getWorkingView(final View v3) {
         View workingView = null; if(null == v3) {
