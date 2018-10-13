@@ -22,10 +22,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     SensorManager sm;
     ListView jlv;
     ArrayAdapter ad;
-    Sensor sA, sM, sL , sLA, sP;
+    Sensor sA, sM, sL , sLA, sP, sG, sSC, sRV, sGRAV, sGRV;
     SensorAdapter sea;
     boolean c = true;
-    String infoAcel = "", infoMagne = "", infoLuz = "", infoLA  = "", infoProx ="", infoBattery = "";
+    String infoAcel = "", infoMagne = "", infoLuz = "", infoLA  = "", infoProx ="", infoBattery = "", infoGravity = "";
+    String infoGyro = "", infoSC = "", infoRV = "", infoGRV = "";
     int n;
     //accelerometer
     double xA = 0, yA = 0, zA = 0, aA = 0, mA = 0, g = SensorManager.STANDARD_GRAVITY;
@@ -36,13 +37,20 @@ public class MainActivity extends Activity implements SensorEventListener {
     //linear acceleration
     double xLA = 0, yLA = 0, zLA = 0, aLA = 0;
     //Proximity
-    double Pin;
+    double Pin = 0;
     //Battery
     String Level;
-    //Sound
-    double dB;
-    //Temperature
-    double TA;
+    //Gyro
+    double xG = 0, yG = 0, zG = 0;
+    //Step Counter
+    double steps = 0;
+    //Rotation Vector
+    double xRV = 0, yRV = 0, zRV = 0;
+    //Gravity
+    double xGR = 0, yGR = 0, zGR = 0;
+    //Game Rotation Vector
+    double xGRV = 0, yGRV = 0, zGRV = 0;
+
 
     double mfeM = SensorManager.MAGNETIC_FIELD_EARTH_MAX;
     double mfem = SensorManager.MAGNETIC_FIELD_EARTH_MIN;
@@ -59,6 +67,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         sL = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
         sLA = sm.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         sP = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        sG = sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        sSC = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        sRV = sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        sGRAV = sm.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        sGRV = sm.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
 
         sea = new SensorAdapter(this, R.layout.sensor_list);
         jlv.setAdapter(sea);
@@ -70,7 +83,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     private List<Sensores> getEntradas() {
         final List<Sensores> datos = new ArrayList<Sensores>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 11; i++) {
             if (i == 0) {
                 datos.add(new Sensores("Accelerometer", infoAcel, R.drawable.ic_accel));
             }
@@ -78,7 +91,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                 datos.add(new Sensores("Magnetism", infoMagne, R.drawable.ic_magnet));
             }
             else if (i == 2){
-                datos.add(new Sensores("Lightness", infoLuz, R.drawable.ic_bright));
+                datos.add(new Sensores("Brightness", infoLuz, R.drawable.ic_bright));
             }
             else if (i == 3){
                 datos.add(new Sensores("Linear Acceleration", infoLA, R.drawable.ic_linear));
@@ -88,6 +101,21 @@ public class MainActivity extends Activity implements SensorEventListener {
             }
             else if (i == 5){
                 datos.add(new Sensores("Battery", infoBattery, R.drawable.ic_battery));
+            }
+            else if (i == 6){
+                datos.add(new Sensores("Gyroscope", infoGyro, R.drawable.ic_giro));
+            }
+            else if (i == 7){
+                datos.add(new Sensores("Step Counter", infoSC, R.drawable.ic_step));
+            }
+            else if (i == 8){
+                datos.add(new Sensores("Rotation Vector", infoRV, R.drawable.ic_rotation));
+            }
+            else if (i == 9){
+                datos.add(new Sensores("Gravity", infoGravity, R.drawable.ic_gravity));
+            }
+            else if (i == 10){
+                datos.add(new Sensores("Game Rotation Vector", infoGRV, R.drawable.ic_game));
             }
         }
         return datos;
@@ -103,7 +131,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         sm.registerListener(this, sP, SensorManager.SENSOR_DELAY_FASTEST);
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_POWER_DISCONNECTED));
-
+        sm.registerListener(this, sG, SensorManager.SENSOR_DELAY_FASTEST);
+        sm.registerListener(this, sSC, SensorManager.SENSOR_DELAY_FASTEST);
+        sm.registerListener(this, sRV, SensorManager.SENSOR_DELAY_FASTEST);
+        sm.registerListener(this, sGRAV, SensorManager.SENSOR_DELAY_FASTEST);
+        sm.registerListener(this, sGRV, SensorManager.SENSOR_DELAY_FASTEST);
         c = true;
         new Asincronia().execute();
     }
@@ -139,6 +171,24 @@ public class MainActivity extends Activity implements SensorEventListener {
             aLA = Math.sqrt(xLA * xLA + yLA * yLA + zLA * zLA);
         } else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
             Pin = event.values[0];
+        } else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            xG = event.values[0];
+            yG = event.values[1];
+            zG = event.values[2];
+        } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            steps = event.values[0];
+        } else if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+            xRV = event.values[0];
+            yRV = event.values[1];
+            zRV = event.values[2];
+        } else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
+            xGR = event.values[0];
+            yGR = event.values[1];
+            zGR = event.values[2];
+        } else if (event.sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR) {
+            xGRV = event.values[0];
+            yGRV = event.values[1];
+            zGRV = event.values[2];
         }
     }
 
@@ -186,6 +236,24 @@ public class MainActivity extends Activity implements SensorEventListener {
 
             infoBattery += Level+"\n";
 
+            infoGyro += "X : " + xG + "\n";
+            infoGyro += "Y : " + yG + "\n";
+            infoGyro += "Z : " + zG + "\n";
+
+            infoSC += "Steps: " + steps + "\n";
+
+            infoRV += "X : " + xRV + "\n";
+            infoRV += "Y : " + yRV + "\n";
+            infoRV += "Z : " + zRV + "\n";
+
+            infoGravity += "X : " + xGR + "\n";
+            infoGravity += "Y : " + yGR + "\n";
+            infoGravity += "Z : " + zGR + "\n";
+
+            infoGRV += "X : " + xGRV + "\n";
+            infoGRV += "Y : " + yGRV + "\n";
+            infoGRV += "Z : " + zGRV + "\n";
+
             sea.clear();
 
             for (Sensores i : getEntradas()) {
@@ -197,6 +265,11 @@ public class MainActivity extends Activity implements SensorEventListener {
             infoLA = "";
             infoProx = "";
             infoBattery = "";
+            infoGyro = "";
+            infoSC = "";
+            infoRV = "";
+            infoGravity = "";
+            infoGRV = "";
         }
     }
 
