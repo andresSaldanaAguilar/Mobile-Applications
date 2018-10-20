@@ -1,24 +1,33 @@
-package e.andressaldana.cubo;
+package e.andressaldana.cubogyro;
 
 import android.content.*;
 import android.graphics.*;
-import android.view.MotionEvent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Random;
+import static android.support.v4.content.ContextCompat.getSystemService;
 
-public class Lienzo extends View {
+public class Lienzo extends View implements SensorEventListener {
+
     Paint p;
     int maxX, maxY, centerX, centerY;
     Obj obj = new Obj();
     int x = 0, y = 0;
+    SensorManager sm;
+    Sensor s;
 
     public Lienzo(Context c) {
         super(c);
+        sm = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
+        s = sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
     }
 
     protected void onDraw(Canvas c) {
+
         super.onDraw(c); // Canvas pinta atributos
         p = new Paint(); // Paint asigna atributos
         int minMaxXY;
@@ -45,14 +54,15 @@ public class Lienzo extends View {
         line(c, p, 3, 7); // aristas verticales
     }
 
-    public boolean onTouchEvent(MotionEvent me){
-        float X = me.getX();
-        float Y = me.getY();
+    public void onSensorChanged(SensorEvent se){
 
-        if(me.getAction()==MotionEvent.ACTION_MOVE){
-            x = (int) (X);
-            y = (int) (Y);
-        }
+        System.out.println("change!");
+
+        float X = se.values[0];
+        float Y = se.values[1];
+
+        x = (int) (X);
+        y = (int) (Y);
 
         obj.theta   = (float) getWidth()/x;
         obj.phi     = (float) getHeight()/y;
@@ -60,12 +70,12 @@ public class Lienzo extends View {
         centerX     = x;
         centerY     = y;
         invalidate();
-        return true;
     }
+
+    public void onAccuracyChanged(Sensor s, int i){	}
 
     void line(Canvas g, Paint pa, int i, int j) {
         Point2D p = obj.vScr[i], q = obj.vScr[j];
-        System.out.println(((int) p.x + centerX));
         pa.setColor(Color.WHITE);
         g.drawLine(centerX + (int) p.x, centerY - (int) p.y, centerX + (int) q.x, centerY - (int) q.y, pa);
     }
