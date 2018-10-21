@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="operations_array">
+        <item>suma</item>
+        <item>multiplica</item>
+        <item>resta</item>
+        <item>divide</item>
+        <item>maximo</item>
+        <item>promedio</item>
+        <item>paridad</item>
+        <item>fibonacci</item>
+        <item>cuadrado</item>
+        <item>raiz</item>
+    </string-array>
+</resources>
