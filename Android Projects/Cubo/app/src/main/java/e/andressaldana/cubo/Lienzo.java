@@ -67,6 +67,7 @@ public class Lienzo extends View {
         Point2D p = obj.vScr[i], q = obj.vScr[j];
         System.out.println(((int) p.x + centerX));
         pa.setColor(Color.WHITE);
+        pa.setStrokeWidth(5);
         g.drawLine(centerX + (int) p.x, centerY - (int) p.y, centerX + (int) q.x, centerY - (int) q.y, pa);
     }
 

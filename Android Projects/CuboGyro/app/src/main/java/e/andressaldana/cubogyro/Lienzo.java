@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.view.View;
 
 import static android.support.v4.content.ContextCompat.getSystemService;
@@ -13,28 +14,30 @@ import static android.support.v4.content.ContextCompat.getSystemService;
 public class Lienzo extends View implements SensorEventListener {
 
     Paint p;
-    int maxX, maxY, centerX, centerY;
+    float maxX, maxY, centerX, centerY;
     Obj obj = new Obj();
-    int x = 0, y = 0;
+    double x = 0, y = 0;
     SensorManager sm;
     Sensor s;
+    int n;
 
     public Lienzo(Context c) {
         super(c);
         sm = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
-        s = sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
+        s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+        new MiAsincronia().execute();
     }
 
     protected void onDraw(Canvas c) {
 
         super.onDraw(c); // Canvas pinta atributos
         p = new Paint(); // Paint asigna atributos
-        int minMaxXY;
+        float minMaxXY;
         maxX = getWidth() - 1;
         maxY = getHeight() - 1;
         p.setColor(Color.parseColor("#636161"));
-        c.drawRect(0,0,getWidth(),getHeight(),p);
+        c.drawRect(0, 0, getWidth(), getHeight(), p);
         minMaxXY = Math.min(maxX, maxY);
         centerX = maxX / 2;
         centerY = maxY / 2;
@@ -54,25 +57,25 @@ public class Lienzo extends View implements SensorEventListener {
         line(c, p, 3, 7); // aristas verticales
     }
 
-    public void onSensorChanged(SensorEvent se){
-
-        System.out.println("change!");
-
+    public void onSensorChanged(SensorEvent se) {
         float X = se.values[0];
         float Y = se.values[1];
+        System.out.println(se.values[0]);
+        System.out.println(se.values[1]);
 
         x = (int) (X);
         y = (int) (Y);
 
-        obj.theta   = (float) getWidth()/x;
-        obj.phi     = (float) getHeight()/y;
-        obj.rho     = (obj.phi/obj.theta)*getHeight();
-        centerX     = x;
-        centerY     = y;
+        obj.theta = (float) ((float) getWidth() / x);
+        obj.phi = (float) ((float) getHeight() / y);
+        obj.rho = (obj.phi / obj.theta) * getHeight();
+        centerX = (float) x;
+        centerY = (float) y;
         invalidate();
     }
 
-    public void onAccuracyChanged(Sensor s, int i){	}
+    public void onAccuracyChanged(Sensor s, int i) {
+    }
 
     void line(Canvas g, Paint pa, int i, int j) {
         Point2D p = obj.vScr[i], q = obj.vScr[j];
@@ -143,5 +146,26 @@ public class Lienzo extends View implements SensorEventListener {
             this.y = (float) y;
             this.z = (float) z;
         }
+    }
+
+    class MiAsincronia extends AsyncTask<Void, Void, Void> {
+        protected Void doInBackground(Void... x) {
+            while (true) {
+                try {
+                    Thread.sleep(100); // 100 milisegundos
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                n++;
+                publishProgress();
+            }
+        }
+
+        protected void onProgressUpdate(Void... progress) {
+            System.out.println(x);
+            System.out.println(y);
+
+        }
+
     }
 }
