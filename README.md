@@ -4,3 +4,4 @@ This repo has MIDlet and Android examples for app developing, the android applic
 
 
 ![Image of cronometer running](Crono.png?raw=true "Cronometer App")
+![Image of cronometer running](pattern.png?raw=true "Cronometer App")
