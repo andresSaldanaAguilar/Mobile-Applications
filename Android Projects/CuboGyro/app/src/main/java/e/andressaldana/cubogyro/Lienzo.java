@@ -9,6 +9,9 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.view.View;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class Lienzo extends View implements SensorEventListener {
@@ -25,7 +28,7 @@ public class Lienzo extends View implements SensorEventListener {
         super(c);
         sm = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
         s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
         new MiAsincronia().execute();
     }
 
@@ -58,13 +61,17 @@ public class Lienzo extends View implements SensorEventListener {
     }
 
     public void onSensorChanged(SensorEvent se) {
-        float X = se.values[0];
-        float Y = se.values[1];
+        double X = se.values[0];
+        double Y = se.values[1];
         System.out.println(se.values[0]);
         System.out.println(se.values[1]);
 
-        x = (int) (X);
-        y = (int) (Y);
+
+
+        x = X;
+        y = Y;
+
+        System.out.println("x: "+x+"y: "+y);
 
         obj.theta = (float) ((float) getWidth() / x);
         obj.phi = (float) ((float) getHeight() / y);

@@ -36,10 +36,6 @@ class MiLienzo extends View {
             p.setTypeface(Typeface.DEFAULT);
             p.setTextSize(90);
             c.drawText("Patron correcto",width/5,height/2,p);
-            /*
-            Intent itn = new Intent(MiLienzo.class ,SegundaActivity.class);
-            itn.getAction();
-            */
         }
         else {
             //cuadricula
@@ -52,6 +48,16 @@ class MiLienzo extends View {
             c.drawCircle(1 * width / 4, 3 * (height / 4)-150, 10, p);
             c.drawCircle(2 * width / 4, 3 * (height / 4)-150, 10, p);
             c.drawCircle(3 * width / 4, 3 * (height / 4)-150, 10, p);
+
+            c.drawCircle(1 * width / 4, 1 * (height / 4)+150, 20, p);
+            c.drawCircle(2 * width / 4, 1 * (height / 4)+150, 20, p);
+            c.drawCircle(3 * width / 4, 1 * (height / 4)+150, 20, p);
+            c.drawCircle(1 * width / 4, 2 * (height / 4), 20, p);
+            c.drawCircle(2 * width / 4, 2 * (height / 4), 20, p);
+            c.drawCircle(3 * width / 4, 2 * (height / 4), 20, p);
+            c.drawCircle(1 * width / 4, 3 * (height / 4)-150, 20, p);
+            c.drawCircle(2 * width / 4, 3 * (height / 4)-150, 20, p);
+            c.drawCircle(3 * width / 4, 3 * (height / 4)-150, 20, p);
 
             //matriz de cuadricula
             matriz = new Float[][]{
@@ -141,7 +147,7 @@ class MiLienzo extends View {
 
     public int isOver(float x, float y){
         for(int i = 0; i < matriz.length; i++){
-            if (x < matriz[i][0]+20 && x > matriz[i][0]-20 && y < matriz[i][1]+20 && y > matriz[i][1]-20){
+            if (x < matriz[i][0]+40 && x > matriz[i][0]-40 && y < matriz[i][1]+40 && y > matriz[i][1]-40){
                 return i;
             }
         }

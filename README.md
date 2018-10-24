@@ -1,7 +1,11 @@
-# Mobile Applications
+## Mobile Applications
 
-This repo has MIDlet and Android examples for app developing, the android applications where made with android studio, so you may consider to run them there
+This repo has MIDlet and Android examples for mobile app developing, the android applications were made with android studio, so you may consider to run them there.
 
 
-![Image of cronometer running](Crono.png?raw=true "Cronometer App")
+## Sensores:  
+Esta app muestra los diferentes sensores que tiene un celular trabajando en tiempo real
+![Image of cronometer running](sensors.png?raw=true "Cronometer App")
+## Pattern:
+Esta app tiene el funcionamiento de un patron de desbloqueo, esta hecho en canvas
 ![Image of cronometer running](pattern.png?raw=true "Cronometer App")
