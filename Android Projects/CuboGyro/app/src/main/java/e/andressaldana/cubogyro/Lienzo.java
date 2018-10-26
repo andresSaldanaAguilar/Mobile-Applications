@@ -66,8 +66,6 @@ public class Lienzo extends View implements SensorEventListener {
         System.out.println(se.values[0]);
         System.out.println(se.values[1]);
 
-
-
         x = X;
         y = Y;
 
