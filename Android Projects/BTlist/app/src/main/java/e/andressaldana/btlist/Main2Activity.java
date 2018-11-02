@@ -83,6 +83,7 @@ public class Main2Activity extends AppCompatActivity {
                 }
                 mensaje = xsb1+"/"+xsb2;
                 System.out.println("Value "+mensaje);
+                mConnectedThread.write(mensaje);
             }
         });
         s2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,6 +96,7 @@ public class Main2Activity extends AppCompatActivity {
                 }
                 mensaje = xsb1+"/"+xsb2;
                 System.out.println("Value "+mensaje);
+                mConnectedThread.write(mensaje);
             }
         });
         sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -107,6 +109,7 @@ public class Main2Activity extends AppCompatActivity {
                 }
                 mensaje = xsb1+"/"+xsb2;
                 System.out.println("Value "+mensaje);
+                mConnectedThread.write(mensaje);
             }
             public void onStartTrackingTouch(SeekBar sb) { /*nada*/ }
             public void onStopTrackingTouch(SeekBar sb) { /*nada*/ }
@@ -122,14 +125,12 @@ public class Main2Activity extends AppCompatActivity {
                 }
                 mensaje = xsb1+"/"+xsb2;
                 System.out.println("Value: "+mensaje);
+                mConnectedThread.write(mensaje);
             }
             public void onStartTrackingTouch(SeekBar sb) { /*nada*/ }
             public void onStopTrackingTouch(SeekBar sb) { /*nada*/ }
         });
         //fin de interfaz
-
-        //envio de info a arduino
-        mConnectedThread.start();
     }
 
     private void checkBTState() {
@@ -163,13 +164,16 @@ public class Main2Activity extends AppCompatActivity {
         public void run() {
             // Se mantiene siempre escribiendo
             while (true) {
-                byte[] msgBuffer = mensaje.getBytes();
-                try {
-                    mmOutStream.write(msgBuffer);
-                } catch (IOException e) {
-                    System.out.println("Error en envio de datos");
-                    finish();
-                }
+            }
+        }
+        public void write(String input) {
+            byte[] msgBuffer = input.getBytes();           //converts entered String into bytes
+            try {
+                mmOutStream.write(msgBuffer);                //write bytes over BT connection via outstream
+            } catch (IOException e) {
+                //if you cannot write, close the application
+                Toast.makeText(getBaseContext(), "Falla en la conexion", Toast.LENGTH_LONG).show();
+                finish();
             }
         }
     }
