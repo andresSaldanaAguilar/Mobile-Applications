@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#2388C1" >
+    android:layout_height="match_parent">
 
-    <TextView android:id="@+id/title_paired_devices"
+    <TextView
+        android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14pt"
-        android:visibility="visible"
-        android:text="Seleccione un dispositivo Bluetooth."
-        android:textColor="#FFFFFF"
         android:paddingLeft="5dp"
-        android:background="#C0C0C0"/>
+        android:text="Seleccione un dispositivo Bluetooth."
+        android:textColor="@color/colorPrimary"
+        android:textSize="10pt"
+        android:visibility="visible" />
 
     <ListView android:id="@+id/paired_devices"
         android:layout_width="match_parent"

@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">PWM_Controller</string>
-    <string name="Motor">Motor</string>
-    <string name="LED">LED</string>
-</resources>

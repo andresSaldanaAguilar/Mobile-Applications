@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
-            textView1.setText("Conectando...");
+            //textView1.setText("Conectando...");
             // Se obtiene la MAC del módulo HC
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);

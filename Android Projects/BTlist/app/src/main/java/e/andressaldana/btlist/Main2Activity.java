@@ -22,9 +22,6 @@ import java.util.UUID;
 
 public class Main2Activity extends AppCompatActivity {
 
-    Handler bluetoothIn;
-
-    final int handlerState = 0;
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
 
@@ -36,7 +33,7 @@ public class Main2Activity extends AppCompatActivity {
 
     private SeekBar sb2 = null, sb1 = null;
     private Switch s1 = null, s2 = null;
-    private String mensaje;
+    private String mensaje = "0/0";
     int xsb1 = 0,xsb2 = 0;
 
     @Override
@@ -44,6 +41,7 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        //inicio de config de bluetooth
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
 
@@ -66,7 +64,10 @@ public class Main2Activity extends AppCompatActivity {
             }
         }
 
-        //
+        mConnectedThread = new ConnectedThread(btSocket);
+        //fin de config de bluetooth
+
+        //inicio de interfaz
         sb1 = findViewById(R.id.xsb1);
         sb2 = findViewById(R.id.xsb2);
         s1 = findViewById(R.id.switch1);
@@ -100,7 +101,7 @@ public class Main2Activity extends AppCompatActivity {
 
             public void onProgressChanged(SeekBar sb, int n, boolean b){
                 if(s1.isChecked()){
-                    xsb1 = n;
+                    xsb1 =  (int) (n*2.55);
                 }else {
                     xsb1 = 0;
                 }
@@ -114,7 +115,7 @@ public class Main2Activity extends AppCompatActivity {
         sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar sb, int n, boolean b){
                 if(s2.isChecked()){
-                    xsb2 = n;
+                    xsb2 = (int) (n*2.55);
                 }
                 else {
                     xsb2 = 0;
@@ -125,16 +126,15 @@ public class Main2Activity extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar sb) { /*nada*/ }
             public void onStopTrackingTouch(SeekBar sb) { /*nada*/ }
         });
-        //
+        //fin de interfaz
 
-        mConnectedThread = new ConnectedThread(btSocket);
-        //mConnectedThread.start();
-        //mConnectedThread.write("x");
+        //envio de info a arduino
+        mConnectedThread.start();
     }
 
     private void checkBTState() {
         if(btAdapter==null) {
-            Toast.makeText(getBaseContext(), "Dispositivo no soporta Bluetooth", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "D¡EL dispositivo no soporta Bluetooth", Toast.LENGTH_LONG).show();
         } else {
             if (btAdapter.isEnabled()) {
             } else {
@@ -148,50 +148,28 @@ public class Main2Activity extends AppCompatActivity {
         return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
     }
 
-
     private class ConnectedThread extends Thread {
-        private final InputStream mmInStream;
+        //private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            InputStream tmpIn = null;
             OutputStream tmpOut = null;
-
             try {
-                tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) { }
-
-            mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
 
         public void run() {
-            byte[] buffer = new byte[256];
-            int bytes;
-            // Se mantiene siempre leyendo
+            // Se mantiene siempre escribiendo
             while (true) {
+                byte[] msgBuffer = mensaje.getBytes();
                 try {
-                    bytes = mmInStream.read(buffer);
-                    String readMessage = new String(buffer, 0, bytes);
-
-                    // Mandar datos a la UI
-                    bluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
+                    mmOutStream.write(msgBuffer);
                 } catch (IOException e) {
-                    break;
+                    System.out.println("Error en envio de datos");
+                    finish();
                 }
-            }
-        }
-
-        // Escritura (Por si se necesita mandar algo al Arduino)
-        public void write(String input) {
-            byte[] msgBuffer = input.getBytes();           //converts entered String into bytes
-            try {
-                mmOutStream.write(msgBuffer);                //write bytes over BT connection via outstream
-            } catch (IOException e) {
-                //if you cannot write, close the application
-                Toast.makeText(getBaseContext(), "Falla en la conexion", Toast.LENGTH_LONG).show();
-                finish();
             }
         }
     }

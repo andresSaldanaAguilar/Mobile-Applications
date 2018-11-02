@@ -5,7 +5,10 @@ This repo has MIDlet and Android examples for mobile app developing, the android
 
 ## Sensores:  
 Esta app muestra los diferentes sensores que tiene un celular trabajando en tiempo real
-![Image of cronometer running](sensors.png?raw=true "Cronometer App")
+![Sensors running on real time](sensors.png?raw=true "Sensors")
 ## Pattern:
 Esta app tiene el funcionamiento de un patron de desbloqueo, esta hecho en canvas
-![Image of cronometer running](pattern.png?raw=true "Cronometer App")
+![Image of patter working](pattern.png?raw=true "Pattern")
+## Google Maps API:
+Esta app muestra la implementación de la API de google maps y algunas de sus features
+![Google maps API](maps.png?raw=true "GMaps API")
