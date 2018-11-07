@@ -14,16 +14,16 @@ import android.nfc.NfcManager;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
-import android.nfc.tech.NfcA;
-import android.os.Build;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
     private  static  final  int DIALOG_WRITE_URL = 1;
@@ -44,14 +44,55 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 writeUrl = true;
-                ShowDialog(DIALOG_WRITE_URL);
+                //ShowDialog(DIALOG_WRITE_URL);
+                MainActivity.this.showDialog(DIALOG_WRITE_URL);
             }
         });
     }
 
-    private void ShowDialog(int action){
+    @Override
+    protected  Dialog onCreateDialog(int id, Bundle args) {
+        switch (id) {
+            case DIALOG_WRITE_URL:
+                return new AlertDialog.Builder(this).setTitle("Write URL to tag")
+                        .setMessage("Touch tag to start writing")
+                        .setCancelable(true)
+                        .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                writeUrl = false;
+                            }
+                        }).create();
+            case DIALOG_NEW_TAG:
+                return new AlertDialog.Builder(this).setTitle("Tag Detected")
+                        .setCancelable(true)
+                        .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+        }
+        return null;
+    }
+
+    @Override
+    protected  void onPrepareDialog(int id, Dialog dialog, Bundle args){
+        switch (id){
+            case DIALOG_NEW_TAG:
+                String message = args.getString(ARG_MESSAGE);
+                if(message != null) ((AlertDialog)dialog).setMessage(message);
+                break;
+        }
+    }
+
+    /*private void ShowDialog(int action){
         switch (action){
-            case DIALOG_WRITE_URL;
+            case DIALOG_WRITE_URL:
                 builder.setTitle("Write URL to tag")
                 .setMessage("Touch tag to start writing")
                 .setCancelable(true)
@@ -80,15 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
         }
-    }
+    }*/
 
-    @Override
-    protected  void onPreparedDialog(int id, Dialog dialog, Bundle args){
-        switch (id){
-            case DIALOG_NEW_TAG:
 
-        }
-    }
 
     private  static final int PENDING_INTENT_TECH_DISCOVERED = 1;
     private NfcAdapter mNfcAdapter;
@@ -131,7 +166,9 @@ public class MainActivity extends AppCompatActivity {
         String action = data.getAction();
         if(NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)){
 
-            if(foregroundDispatch &&writeUrl){
+            Tag tag = data.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            if(foregroundDispatch && writeUrl){
 
                 writeUrl = false;
 
@@ -145,11 +182,9 @@ public class MainActivity extends AppCompatActivity {
                                                       new byte[0],
                                                       urlPayload);
 
-                Tag tag = data.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-
                 NdefMessage msg = new NdefMessage(new NdefRecord[]{urlRecord});
-
                 Ndef ndefTag = Ndef.get(tag);
+
                 if(ndefTag != null){
                     try{
                         ndefTag.connect();
@@ -180,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                     StringBuilder tagInfo = new StringBuilder();
                     byte[] uid = tag.getId();
                     tagInfo.append("UUID: ")
-                            .append(StringUtils.convertByteArrayToHexString(uid))
+                            .append(toHexString(uid))
                             .append("\n\n");
                     Parcelable[] ndefRaw = data.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
                     NdefMessage[] ndefMsgs = null;
@@ -190,9 +225,38 @@ public class MainActivity extends AppCompatActivity {
                             ndefMsgs[i] = (NdefMessage)ndefRaw[i];
                         }
                     }
+                    if(ndefMsgs != null){
+                        for(int i = 0; i < ndefMsgs.length; i++){
+                            NdefRecord[] records = ndefMsgs[i].getRecords();
+                            if(records != null){
+                                for(int j = 0; j < records.length; j++){
+                                    if((records[j].getTnf() == NdefRecord.TNF_WELL_KNOWN) && Arrays.equals(records[j].getType(), NdefRecord.RTD_URI)){
+                                        byte[] payload= records[j].getPayload();
+                                        String uri = new String(Arrays.copyOfRange(payload,1,payload.length),Charset.forName("UTF-8"));
+                                        tagInfo.append("URI: ").append(uri).append("\n");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Bundle args= new Bundle();
+                    args.putString(ARG_MESSAGE,tagInfo.toString());
+                    showDialog(DIALOG_NEW_TAG,args);
                 }
                 //dismissDialog();
             }
+    }
+
+    public static String toHexString(byte[] bytes) {
+        char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        char[] hexChars = new char[bytes.length * 2];
+        int v;
+        for ( int j = 0; j < bytes.length; j++ ) {
+            v = bytes[j] & 0xFF;
+            hexChars[j*2] = hexArray[v/16];
+            hexChars[j*2 + 1] = hexArray[v%16];
+        }
+        return new String(hexChars);
     }
 
 }
